@@ -4,38 +4,28 @@ import { User } from './user.entity';
 import { UserService } from './user.service';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { env } from 'process';
-
-
-import * as NodeRSA from 'node-rsa';
-
-let private_key = env.private_key;
-const key_private = new NodeRSA(private_key);
+import { UseGuards } from '@nestjs/common';
+// import { GqlAuthGuard } from '../auth/jwt-auth.guard';
 
 @Resolver('User')
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-    @Query(() => [User])
-    async users(): Promise<User[]> {
-        const users = await this.userService.findAllUsers();
-        users.map(el => {
-            el.name = key_private.decrypt(el.name, 'utf8');
-            el.email = key_private.decrypt(el.email, 'utf8');
-        });
-        return users;
-    }
+  @Mutation(() => User)
+  async createUser(@Args('data') data: CreateUserInput): Promise<User> {
+    return this.userService.createUser(data);
+  }
 
-    @Query(() => User)
-    async user(
-        @Args('id') id: string
-    ): Promise<User> {
-        const user = await this.userService.findUserById(id);
-        user.name = key_private.decrypt(user.name, 'utf8');
-        user.email = key_private.decrypt(user.email, 'utf8');
-        return user;
-    }
+  // @UseGuards(GqlAuthGuard)
+  // @Query(() => User)
+  // async user(@Args('id') id: string): Promise<User> {
+  //   return this.userService.getUserById(id);
+  // }
 
+  @Query(() => User)
+  async userByEmail(@Args('email') email: string): Promise<User> {
+    return this.userService.getUserByEmail(email);
+  }
 
   @Query(() => [User])
   async users(): Promise<User[]> {
