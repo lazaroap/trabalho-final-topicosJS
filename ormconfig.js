@@ -1,3 +1,4 @@
+//ormconfig.js:
 module.exports = {
   type: 'postgres',
   host: process.env.DB_HOST,
@@ -5,9 +6,13 @@ module.exports = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: ['dist/**/*.entity{.ts,.js}'],
-  synchronize: process.env.DB_SYNC == 'false',
-  migrations: ["dist/migrations/*{.ts,.js}"],
+  entities:['dist/**/*.entity{.ts,.js}'],
+  synchronize: process.env.DB_SYNC == 'true',
+  migrations: ['./dist/database/migrations/**/*.ts'],
+  cli: {
+    entitiesDir: ['./dist/**/*.entity'],
+    migrationsDir: ['./dist/database/migrations/'],
+  },
   migrationsTableName: "migrations_typeorm",
   migrationsRun: true,
-};
+}; 
