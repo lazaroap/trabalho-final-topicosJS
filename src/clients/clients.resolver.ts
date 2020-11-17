@@ -17,26 +17,37 @@ const key_private = new NodeRSA(private_key);
 export class ClientsResolver {
     constructor(
         private clientsService: ClientsService
-    ){}
+    ) { }
 
-    @Query(() => [Clients])
-    async clients(): Promise<Clients[]> {
-        const clients = await this.clientsService.findAllClients();
-        clients.map(el => {
-        el.name = key_private.decrypt(el.name, 'utf8');
-        el.phone = key_private.decrypt(el.phone, 'utf8');
-        el.email = key_private.decrypt(el.email, 'utf8');
-        });
-        return clients;
-                  
+    // @Query(() => [Clients])
+    // async clients(): Promise<Clients[]> {
+    //     const clients = await this.clientsService.findAllClients();
+    //     clients.map(el => {
+    //     el.name = key_private.decrypt(el.name, 'utf8');
+    //     el.phone = key_private.decrypt(el.phone, 'utf8');
+    //     el.email = key_private.decrypt(el.email, 'utf8');
+    //     });
+    //     return clients;
 
-    }
+
+    // }
+
+    // @Mutation(() => Clients)
+    // async createClients(
+    //     @Args('data') data: CreateClientInput
+    // ): Promise<Clients> {
+    //     const clients = await this.clientsService.createClient(data);
+    //     return clients;
+    // }
+
+    // @Mutation(() => Boolean)
+    // async deleteClient(@Args('id') id: string): Promise<true> {
+    //   await this.clientsService.deleteClient(id);
+    //   return true;
+    // }
 
     @Mutation(() => Clients)
-    async createClients(
-        @Args('data') data: CreateClientInput
-    ): Promise<Clients> {
-        const clients = await this.clientsService.createClient(data);
-        return clients;
+    async userByEmail(@Args('email') email: string): Promise<Clients> {
+        return this.clientsService.getClientByEmail(email)
     }
 }

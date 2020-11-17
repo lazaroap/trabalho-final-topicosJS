@@ -1,7 +1,9 @@
-import { ObjectType, Field, ID } from "@nestjs/graphql";
+import { ObjectType, Field, ID, HideField } from "@nestjs/graphql";
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
 import { env } from 'process';
 import * as NodeRSA from 'node-rsa';
+import { hashPasswordTransform } from "src/common/helpers/crypto";
+import { FilterableField } from "@nestjs-query/query-graphql";
 
 // const key = new NodeRSA({ b: 1024});
 
@@ -16,12 +18,14 @@ export class Clients {
     @Field(() => ID)
     id: string;
 
-    @Column({
-        transformer: {
-            to: (value: string) => key_public.encrypt(value, 'base64'),
-            from: (value: string) => value
-        }
-    })
+    // @Column({
+    //     transformer: {
+    //         to: (value: string) => key_public.encrypt(value, 'base64'),
+    //         from: (value: string) => value
+    //     }
+    // })
+    @Column()
+    @FilterableField()
     name: string;
 
     @Column({
@@ -30,6 +34,7 @@ export class Clients {
             from: (value: string) => value
         }
     })
+    @FilterableField()
     phone: string;
 
     @Column({
@@ -38,7 +43,14 @@ export class Clients {
             from: (value: string) => value
         }
     })
+    @FilterableField()
     email: string;
+
+    @Column({
+        transformer: hashPasswordTransform
+    })
+    //@HideField()
+    password: string;
 
     @CreateDateColumn({ name: 'created_At' })
     createdAt: Date;
