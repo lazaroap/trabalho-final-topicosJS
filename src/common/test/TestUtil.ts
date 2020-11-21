@@ -9,6 +9,7 @@ export default class TestUtil {
     user.email = 'valid@email.com';
     user.name = 'Angelo Luz';
     user.id = '1';
+    user.password = '12345';
     return user;
   }
 
@@ -25,11 +26,13 @@ export default class TestUtil {
 export const mockAddAccountParams: CreateUserInput = {
   name: 'Test User',
   email: 'user@email.com',
+  password: '55555',
 };
 
 export const mockUpdateUserParams: UpdateUserInput = {
   id: '1',
   email: 'email-updated@email.com',
+  password:'54321'
 };
 
 export const mockUserModel: User = {
@@ -48,10 +51,12 @@ export const mockUserArrayModel: User[] = [
     id: '2',
     name: 'Test User 2',
     email: 'email2@email.com',
+    password: '22222'
   },
   {
     id: '3',
     name: 'Test User 3',
     email: 'email3@email.com',
+    password: '33333'
   },
 ];
