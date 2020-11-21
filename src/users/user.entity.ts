@@ -15,21 +15,32 @@ export class User {
   @Field(() => ID)
   id: string;
 
-    @Column({
+    /*@Column({
         transformer: {
             to: (value: string) => key_public.encrypt(value, 'base64'),
             from: (value: string) => value
         }
-    })
+    })*/
+    @Column()
     name: string;
 
 
-    @Column({
+    /*@Column({
         transformer: {
             to: (value: string) => key_public.encrypt(value, 'base64'),
             from: (value: string) => value
         }
-    })
+    })*/
+    @Column()
     email: string;
+
+    /*@Column({
+        transformer: {
+            to: (value: string) => key_public.encrypt(value, 'base64'),
+            from: (value: string) => value
+        }
+    })*/
+    @Column()
+    password: string;
 
 }
